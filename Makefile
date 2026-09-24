@@ -23,7 +23,7 @@ player:
 	xargs -I {} sed -i '/IF (NOT PYTH/,/ENDIF/d' {}
 
 	find . -type f -exec grep -l "PYTHONINTERP_FOUND" {} \; |\
-	xargs -I {} sed -i 's/PYTHONINTERP_FOUND/TRUE/' {}
+	xargs -I {} sed -i 's/PYTHONINTERP_FOUND/1/' {}
 	
 	mkdir build
 	cd build

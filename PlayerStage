@@ -10,6 +10,8 @@ RUN apt-get update -yq \
 
 RUN apt-get install emacs x11-utils ruby -yq
 
+RUN pip install swig
+
 # Add user and enable x11 through ssh
 RUN useradd -s /bin/bash erik \
     && echo "erik:erik" | chpasswd \
