@@ -10,20 +10,23 @@ player:
 	export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 	cd player
 
+	# C Language standard must be C11 (not C17 or other)
 	sed -i '1s/^/set (CMAKE_CXX_STANDARD_REQUIRED ON)\n/' ${CM}
 	sed -i '1s/^/set (CMAKE_CXX_STANDARD 11)\n/'          ${CM}
 
+	# CMAKE version is outdated, lots of stuff below deprecated
 	find . -type f -exec grep -il findpythoninterp {} \; |\
 	xargs -I {} sed -i 's/FindPythonInterp/FindPython3/' {}
-
 	find . -type f -exec grep -il findpythonlibs {} \; |\
 	xargs -I {} sed -i 's/FindPythonLibs/FindPython3/' {}
-
 	find . -type f -exec grep -l "IF (NOT PYTH" {} \; |\
 	xargs -I {} sed -i '/IF (NOT PYTH/,/ENDIF/d' {}
-
 	find . -type f -exec grep -l "PYTHONINTERP_FOUND" {} \; |\
 	xargs -I {} sed -i 's/PYTHONINTERP_FOUND/1/' {}
+	find . -type f -exec grep -l "(PythonInterp)" {} \; |\
+	xargs -I {} sed -i 's/PythonInterp/Python3/' {}
+	find . -type f -exec grep -l "(PythonLibs)" {} \; |\
+	xargs -I {} sed -i 's/PythonLibs/Python3/' {}
 	
 	mkdir build
 	cd build
