@@ -4,8 +4,9 @@
 .ONESHELL:
 
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-CM = CMakeLists.txt
+CM = $(shell find . -type f -name CMakeLists.txt)
 
+clean:; rm -fr player/build Stage/build
 player:
 	git clone https://github.com/playerproject/player.git
 	cd player
@@ -13,10 +14,11 @@ player:
 	# C Language standard must be C11 (not C17 or other)
 	sed -i '1s/^/set (CMAKE_CXX_STANDARD_REQUIRED ON)\n/' ${CM}
 	sed -i '1s/^/set (CMAKE_CXX_STANDARD 11)\n/'          ${CM}
+	sed -i '1s/^/cmake_policy(SET CMP0148 OLD)\n/'        ${CM}
+	sed -i '1s/^/cmake_policy(SET CMP0167 OLD)\n/'        ${CM}
 
-	find . -type f -name ${CM} |\
-	xargs -I {} sed -i '1s/^/cmake_policy(SET CMP0148 OLD)\n/;1s/^/cmake_policy(SET CMP0167 OLD)\n/' {}
-
+player/build: player
+	cd player
 	mkdir build
 	cd build
 	cmake ../
