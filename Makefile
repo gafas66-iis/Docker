@@ -5,28 +5,10 @@
 
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
-clean:; rm -fr player/build Stage/build
-
-CM = CMakeLists.txt
-
 player:
-	git clone https://github.com/playerproject/player.git
-	export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-	cd player
+	git clone https://github.com/RobolabUACJ/katana.git
+	cd katana
 
-	sed -i '1s/^/set (CMAKE_CXX_STANDARD_REQUIRED ON)\n/' ${CM}
-	sed -i '1s/^/set (CMAKE_CXX_STANDARD 11)\n/'          ${CM}
-
-	find . -type f -exec grep -il findpythoninterp {} \; |\
-	xargs -I {} sed -i 's/FindPythonInterp/FindPython3/' {}
-
-	find . -type f -exec grep -il findpythonlibs {} \; |\
-	xargs -I {} sed -i 's/FindPythonLibs/FindPython3/' {}
-
-	find . -type f -exec grep -l "IF (NOT PYTH" {} \; |\
-	xargs -I {} sed -i '/IF (NOT PYTH/,/ENDIF/d' {}
-
-	cd player
 	mkdir build
 	cd build
 	cmake ../

@@ -8,15 +8,12 @@ RUN apt-get install cmake build-essential ruby -yq
 
 WORKDIR /root
 
-#RUN wget http://www.cmake.org/files/v2.6/cmake-2.6.2.tar.gz \
-#&& tar zxf cmake-2.6.2.tar.gz \
-#&& cd cmake-2.6.2 \
-#&& ./bootstrap && make && make install
-
 RUN pip install swig
 
 RUN apt-get install libfltk1.3-dev -yq
 RUN apt-get install libtirpc-dev -yq
+RUN apt-get install libopencv-dev python3-opencv -yq
+RUN apt-get install libboost-all-dev -yq
 
 ADD Makefile /app/Makefile
 WORKDIR /app
