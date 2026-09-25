@@ -6,20 +6,26 @@
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
 clean:; rm -fr player/build Stage/build
+
+CM = CMakeLists.txt
+
 player:
 	git clone https://github.com/playerproject/player.git
+	export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 	cd player
 
-	CM=$$(find . -type f -name CMakeLists.txt)
-	# C Language standard must be C11 (not C17 or other)
-	sed -i '1s/^/set (CMAKE_CXX_STANDARD_REQUIRED ON)\n/' $${CM}
-	sed -i '1s/^/set (CMAKE_CXX_STANDARD 11)\n/'          $${CM}
-	
-	# Policies are deprecated - use OLD: Needeed for python bindings, but FAIL!
-	#sed -i '1s/^/cmake_policy(SET CMP0148 OLD)\n/'        $${CM}
-	#sed -i '1s/^/cmake_policy(SET CMP0167 OLD)\n/'        $${CM}
+	sed -i '1s/^/set (CMAKE_CXX_STANDARD_REQUIRED ON)\n/' ${CM}
+	sed -i '1s/^/set (CMAKE_CXX_STANDARD 11)\n/'          ${CM}
 
-player/build: player
+	find . -type f -exec grep -il findpythoninterp {} \; |\
+	xargs -I {} sed -i 's/FindPythonInterp/FindPython3/' {}
+
+	find . -type f -exec grep -il findpythonlibs {} \; |\
+	xargs -I {} sed -i 's/FindPythonLibs/FindPython3/' {}
+
+	find . -type f -exec grep -l "IF (NOT PYTH" {} \; |\
+	xargs -I {} sed -i '/IF (NOT PYTH/,/ENDIF/d' {}
+
 	cd player
 	mkdir build
 	cd build
@@ -42,12 +48,11 @@ stage:
 	sudo make install
 
 build:; sudo docker build -t playerstage -f PlayerStage .
-#build:; sudo docker build -t playerstage -f AIPlayerStage .
-start:
-	-sudo docker rm -f test1
+run:
+	-sudo docker rm -f playerstage
 	sudo docker run -td -p 2225:22 \
-	--name test1 \
-	-v /home/demo_10g:/home/demo_10g \
+	--name playerstage \
+	-v home:/home/erik \
 	playerstage
 
 # End of file
