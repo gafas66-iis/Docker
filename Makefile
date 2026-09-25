@@ -14,9 +14,10 @@ player:
 	# C Language standard must be C11 (not C17 or other)
 	sed -i '1s/^/set (CMAKE_CXX_STANDARD_REQUIRED ON)\n/' $${CM}
 	sed -i '1s/^/set (CMAKE_CXX_STANDARD 11)\n/'          $${CM}
-	# Policies are deprecated - use OLD
-	sed -i '1s/^/cmake_policy(SET CMP0148 OLD)\n/'        $${CM}
-	sed -i '1s/^/cmake_policy(SET CMP0167 OLD)\n/'        $${CM}
+	
+	# Policies are deprecated - use OLD: Needeed for python bindings, but FAIL!
+	#sed -i '1s/^/cmake_policy(SET CMP0148 OLD)\n/'        $${CM}
+	#sed -i '1s/^/cmake_policy(SET CMP0167 OLD)\n/'        $${CM}
 
 player/build: player
 	cd player
