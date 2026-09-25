@@ -3,7 +3,15 @@
 FROM mybase:latest
 
 # Playerstage specific here
-RUN apt-get install cmake build-essential ruby -yq
+
+RUN apt-get install build-essential ruby -yq
+
+WORKDIR /root
+
+RUN wget http://www.cmake.org/files/v2.6/cmake-2.6.2.tar.gz \
+&& tar zxf cmake-2.6.2.tar.gz \
+&& cd cmake-2.6.2 \
+&& make && make install
 
 RUN pip install swig
 
