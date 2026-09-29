@@ -16,12 +16,20 @@ services:
             context: ./
             dockerfile: Dockerfile
         container_name: flask
-        command: gunicorn --bind 0.0.0.0:8000 --workers 4 "app.create_app:create_app()"
+        command: /bin/sh -c '/usr/sbin/sshd -D & gunicorn --bind 0.0.0.0:8000 --workers 4 "app.create_app:create_app()"'
         volumes:
             - ./:/var/www
+            - home:/home/erik
+        ports:
+            - 2226:22
         networks:
             - my-network
             
 networks:
     my-network:
+
+volumes:
+    home:
+        external: true
+        name: home
 
