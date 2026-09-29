@@ -1,0 +1,11 @@
+services:
+    playerstage:
+        build:
+            context: ./
+            dockerfile: playerstage
+        container_name: ps
+        volumes:
+            - home:/home/erik
+        ports:
+            - 2225:22
+        
