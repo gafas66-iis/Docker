@@ -1,11 +1,16 @@
 services:
     playerstage:
+        hostname: ps
         build:
             context: ./
-            dockerfile: playerstage
-        container_name: ps
+        container_name: playerstage
         volumes:
             - home:/home/erik
         ports:
             - 2225:22
-        
+
+volumes:
+    home:
+        external: true
+        name: home
+
