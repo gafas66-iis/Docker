@@ -34,6 +34,7 @@ ENV LANG=en_US.utf8
 ADD Makefile /app/Makefile
 WORKDIR /app
 
+# 'player' is called katana, linking to official name
 RUN make player && cd /usr/local/bin;ln -s katana player
 RUN make stage
 
